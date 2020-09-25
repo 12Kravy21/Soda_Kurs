@@ -10,7 +10,7 @@ private:
         short int apartment = 0;
         char date[10] = "\0";
     } inhabitedLocality;
-    inhabitedLocality records[4000] = {0};
+    inhabitedLocality records[4000];
     inhabitedLocality* indexRecords[4000] = {nullptr};
 
 public:

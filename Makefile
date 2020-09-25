@@ -3,13 +3,13 @@ COMPILEFLAGS=-Wall -Werror
 all: bin/kurs format
 
 bin/kurs: build/main.o build/handler.o
-			$(CXX) $(COMPILEFLAGS) build/main.o build/handler.o -o $@
+			$(CXX) $(COMPILEFLAGS) build/main.o build/handler.o -o $@ -std=c++11
 
 build/main.o: src/main.cpp  
-			$(CXX) $(COMPILEFLAGS) -I include -I src -c $< -o $@
+			$(CXX) $(COMPILEFLAGS) -I include -I src -c $< -o $@ -std=c++11
 
 build/handler.o: src/handler.cpp include/handler.h
-			$(CXX) $(COMPILEFLAGS) -I include -I src -c $< -o $@
+			$(CXX) $(COMPILEFLAGS) -I include -I src -c $< -o $@ -std=c++11
 
 format: src/main.cpp
 			clang-format -i src/main.cpp  src/handler.cpp  include/handler.h
