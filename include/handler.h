@@ -13,10 +13,22 @@ private:
     inhabitedLocality records[4000];
     inhabitedLocality** indexRecords;
 
+    struct list {
+        handle::inhabitedLocality* data = nullptr;
+        struct list* next = nullptr;
+    };
+
+    list* root = nullptr;
+
 public:
     handle();
-    void show();
+    void ShowDB();
     void heapify(inhabitedLocality** arr, int n, int i);
-    void HeapSort(); //сначала проверяю по первому слову если они == то еще и по
-                     //второму
+    void HeapSort();
+    void FindKey(char key[]);
+
+    // list function
+
+    void AddToList(inhabitedLocality* locality);
+    void PrintList();
 };

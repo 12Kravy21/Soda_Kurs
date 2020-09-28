@@ -1,10 +1,7 @@
-#include "handler.h"
+#include "menu.h"
 
 int main()
 {
-    handle body;
-    body.show();
-    body.HeapSort();
-    body.show();
+    SelectionMenu();
     return 0;
 }

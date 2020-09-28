@@ -14,7 +14,7 @@ handle::handle()
     }
 }
 
-void handle::show()
+void handle::ShowDB()
 {
     using namespace std;
     int multiplier = 1;
@@ -55,22 +55,22 @@ void handle::heapify(inhabitedLocality** arr, int n, int i)
     int l = 2 * i + 1;
     int r = 2 * i + 2;
 
-    if (l < n && strcmp(arr[l]->streetName, arr[head]->streetName) == 0) {
-        if (strcmp(arr[l]->fullName, arr[head]->fullName) > 0) {
+    if (l < n && strcmp(arr[l]->fullName, arr[head]->fullName) == 0) {
+        if (strcmp(arr[l]->streetName, arr[head]->streetName) > 0) {
             head = l;
         }
     } else {
-        if (l < n && strcmp(arr[l]->streetName, arr[head]->streetName) > 0) {
+        if (l < n && strcmp(arr[l]->fullName, arr[head]->fullName) > 0) {
             head = l;
         }
     }
 
-    if (r < n && strcmp(arr[r]->streetName, arr[head]->streetName) == 0) {
-        if (strcmp(arr[r]->fullName, arr[head]->fullName) > 0) {
+    if (r < n && strcmp(arr[r]->fullName, arr[head]->fullName) == 0) {
+        if (strcmp(arr[r]->streetName, arr[head]->streetName) > 0) {
             head = r;
         }
     } else {
-        if (r < n && strcmp(arr[r]->streetName, arr[head]->streetName) > 0) {
+        if (r < n && strcmp(arr[r]->fullName, arr[head]->fullName) > 0) {
             head = r;
         }
     }
@@ -99,3 +99,67 @@ void handle::HeapSort()
         heapify(handle::indexRecords, i, 0);
     }
 }
+
+void handle::FindKey(char key[])
+{
+    int L = 0, R = 3999, sero = 0;
+    while (L < R) {
+        sero = (L + R) / 2;
+        if (strncmp(indexRecords[sero]->fullName, key, 3) < 0) {
+            L = sero + 1;
+        } else {
+            R = sero;
+        }
+    }
+    if (strncmp(indexRecords[R]->fullName, key, 3) == 0) {
+        while (strncmp(indexRecords[R]->fullName, key, 3) == 0 && R < 4000) {
+            AddToList(indexRecords[R]);
+            R++;
+        }
+    } else {
+        std::cout << "Not found!";
+    }
+}
+
+// list function
+
+void handle::AddToList(inhabitedLocality* locality)
+{
+    if (handle::root != nullptr) {
+        handle::list* head = handle::root;
+        while (head->next) {
+            head = head->next;
+        }
+        head->next = new handle::list;
+        head = head->next;
+        head->data = locality;
+    } else {
+        handle::root = new handle::list;
+        handle::root->data = locality;
+    }
+}
+
+void handle::PrintList()
+{
+    using namespace std;
+    handle::list* head = handle::root;
+    while (head) {
+        cout << head->data->fullName << endl
+             << head->data->streetName << endl
+             << head->data->house << endl
+             << head->data->apartment << endl
+             << head->data->date << endl
+             << endl;
+        head = head->next;
+    }
+}
+
+// void DeleteList(struct List** head)
+// {
+// struct List* p = *head;
+// while (p != NULL) {
+// *head = p->next;
+// free(p);
+// p = *head;
+// }
+// }
