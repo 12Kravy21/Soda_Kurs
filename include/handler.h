@@ -11,9 +11,12 @@ private:
         char date[10] = "\0";
     } inhabitedLocality;
     inhabitedLocality records[4000];
-    inhabitedLocality* indexRecords[4000] = {nullptr};
+    inhabitedLocality** indexRecords;
 
 public:
     handle();
     void show();
+    void heapify(inhabitedLocality** arr, int n, int i);
+    void HeapSort(); //сначала проверяю по первому слову если они == то еще и по
+                     //второму
 };
