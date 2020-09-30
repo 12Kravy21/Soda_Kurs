@@ -13,12 +13,25 @@ private:
     inhabitedLocality records[4000];
     inhabitedLocality** indexRecords;
 
+    // queue
+
     struct list {
         handle::inhabitedLocality* data = nullptr;
         struct list* next = nullptr;
     };
-
     list* root = nullptr;
+
+    // AVL tree
+
+    struct vertex {
+        handle::inhabitedLocality* data = nullptr;
+        struct vertex* left = nullptr;
+        struct vertex* right = nullptr;
+        struct vertex* equal = nullptr;
+        int balance = 0;
+    };
+    vertex* vertexRoot = nullptr;
+    int increase = true;
 
 public:
     handle();
@@ -31,4 +44,16 @@ public:
 
     void AddToList(inhabitedLocality* locality);
     void PrintList();
+    void MoveToTree();
+
+    // AVL function
+
+    void LeftLeftRotation(vertex** head);
+    void LeftRightRotation(vertex** head);
+    void RightRightRotation(vertex** head);
+    void RightLeftRotation(vertex** head);
+    void AVLTree(vertex** head, inhabitedLocality* key);
+    void LeftToRight(vertex* head);
+    void AddToAVL(inhabitedLocality* key);
+    vertex* ReturnVertexRoot();
 };

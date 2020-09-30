@@ -32,12 +32,15 @@ void handle::ShowDB()
             break;
         }
         for (int i = 20 * (multiplier - 1); i < multiplier * 20; i++) {
-            cout << handle::indexRecords[i]->fullName << endl
-                 << handle::indexRecords[i]->streetName << endl
-                 << handle::indexRecords[i]->house << endl
-                 << handle::indexRecords[i]->apartment << endl
-                 << handle::indexRecords[i]->date << endl
-                 << endl;
+            std::cout << handle::indexRecords[i]->fullName << " ";
+            std::cout.width(22);
+            std::cout << handle::indexRecords[i]->streetName << " ";
+            std::cout.width(6);
+            std::cout << handle::indexRecords[i]->house << " ";
+            std::cout.width(10);
+            std::cout << handle::indexRecords[i]->apartment << " ";
+            std::cout.width(22);
+            std::cout << handle::indexRecords[i]->date << std::endl;
         }
         do {
             cout << "Number page: ";
@@ -144,12 +147,24 @@ void handle::PrintList()
     using namespace std;
     handle::list* head = handle::root;
     while (head) {
-        cout << head->data->fullName << endl
-             << head->data->streetName << endl
-             << head->data->house << endl
-             << head->data->apartment << endl
-             << head->data->date << endl
-             << endl;
+        std::cout << head->data->fullName << " ";
+        std::cout.width(22);
+        std::cout << head->data->streetName << " ";
+        std::cout.width(6);
+        std::cout << head->data->house << " ";
+        std::cout.width(10);
+        std::cout << head->data->apartment << " ";
+        std::cout.width(22);
+        std::cout << head->data->date << std::endl;
+        head = head->next;
+    }
+}
+
+void handle::MoveToTree()
+{
+    handle::list* head = handle::root;
+    while (head) {
+        AddToAVL(head->data);
         head = head->next;
     }
 }
@@ -163,3 +178,157 @@ void handle::PrintList()
 // p = *head;
 // }
 // }
+
+// AVL
+
+void handle::LeftLeftRotation(vertex** head)
+{
+    handle::vertex* q = (*head)->left;
+    q->balance = 0;
+    (*head)->balance = 0;
+    (*head)->left = q->right;
+    q->right = *head;
+    *head = q;
+    handle::increase = false;
+}
+
+void handle::LeftRightRotation(vertex** head)
+{
+    handle::vertex* q = (*head)->left;
+    handle::vertex* r = q->right;
+    if (r->balance < 0) {
+        (*head)->balance = 1; //+=1
+    } else {
+        (*head)->balance = 0;
+    }
+    if (r->balance > 0) {
+        q->balance = -1; //-=1
+    } else {
+        q->balance = 0;
+    }
+    r->balance = 0;
+    (*head)->left = r->right;
+    q->right = r->left;
+    r->left = q;
+    r->right = (*head);
+    (*head) = r;
+    handle::increase = false;
+}
+
+void handle::RightRightRotation(vertex** head)
+{
+    handle::vertex* q = (*head)->right;
+    q->balance = 0;
+    (*head)->balance = 0;
+    (*head)->right = q->left;
+    q->left = (*head);
+    (*head) = q;
+    handle::increase = false;
+}
+
+void handle::RightLeftRotation(vertex** head)
+{
+    handle::vertex* q = (*head)->right;
+    handle::vertex* r = q->left;
+    if (r->balance > 0)
+        (*head)->balance = -1;
+    else
+        (*head)->balance = 0;
+    if (r->balance < 0)
+        q->balance = 1;
+    else
+        q->balance = 0;
+    r->balance = 0;
+    (*head)->right = r->left;
+    q->left = r->right;
+    r->left = (*head);
+    r->right = q;
+    (*head) = r;
+    handle::increase = false;
+}
+
+void handle::AVLTree(vertex** head, inhabitedLocality* key)
+{
+    if (*head == nullptr) {
+        (*head) = new handle::vertex;
+        (*head)->data = key;
+        handle::increase = true;
+    } else if (strcmp((*head)->data->date, key->date) > 0) {
+        AVLTree(&((*head)->left), key);
+        if (handle::increase == true) {
+            if ((*head)->balance > 0) {
+                (*head)->balance = 0;
+                handle::increase = false;
+            } else if ((*head)->balance == 0) {
+                (*head)->balance = -1;
+                handle::increase = true;
+            } else if ((*head)->left->balance < 0) {
+                LeftLeftRotation(head);
+            } else {
+                LeftRightRotation(head);
+            }
+        }
+    } else if (strcmp((*head)->data->date, key->date) < 0) {
+        AVLTree(&((*head)->right), key);
+        if (handle::increase == true) {
+            if ((*head)->balance < 0) {
+                (*head)->balance = 0;
+                handle::increase = false;
+            } else if ((*head)->balance == 0) {
+                (*head)->balance = 1;
+                handle::increase = true;
+            } else if ((*head)->right->balance > 0) {
+                RightRightRotation(head);
+            } else {
+                RightLeftRotation(head);
+            }
+        }
+    } else {
+        if (strcmp((*head)->data->date, key->date) == 0) {
+            /*
+                here equal keys been added into pointer by named "vertex* equal"
+            */
+        }
+    }
+}
+
+void handle::LeftToRight(vertex* head)
+{
+    if (head) {
+        LeftToRight(head->left);
+        std::cout << head->data->fullName << " ";
+        std::cout.width(22);
+        std::cout << head->data->streetName << " ";
+        std::cout.width(6);
+        std::cout << head->data->house << " ";
+        std::cout.width(10);
+        std::cout << head->data->apartment << " ";
+        std::cout.width(22);
+        std::cout << head->data->date << std::endl;
+        handle::vertex* p = head->equal;
+        while (p) {
+            std::cout << p->data->fullName << " ";
+            std::cout.width(22);
+            std::cout << p->data->streetName << " ";
+            std::cout.width(6);
+            std::cout << p->data->house << " ";
+            std::cout.width(10);
+            std::cout << p->data->apartment << " ";
+            std::cout.width(22);
+            std::cout << p->data->date << std::endl;
+            p = p->equal;
+        }
+        LeftToRight(head->right);
+    }
+}
+
+void handle::AddToAVL(inhabitedLocality* key)
+{
+    handle::vertex** head = &(handle::vertexRoot);
+    AVLTree(head, key);
+}
+
+handle::vertex* handle::ReturnVertexRoot()
+{
+    return vertexRoot;
+}

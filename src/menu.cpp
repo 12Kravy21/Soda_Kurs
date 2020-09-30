@@ -26,4 +26,9 @@ void SelectionMenu()
     cout << "Press any key to continue...\n";
     getchar();
     getchar();
+    printf(ESC "c");
+    body.MoveToTree();
+    cout << "Tree: \n";
+    body.LeftToRight(body.ReturnVertexRoot());
+    getchar();
 }
