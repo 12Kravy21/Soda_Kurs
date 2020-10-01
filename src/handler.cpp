@@ -284,10 +284,18 @@ void handle::AVLTree(vertex** head, inhabitedLocality* key)
             }
         }
     } else {
-        if (strcmp((*head)->data->date, key->date) == 0) {
-            /*
-                here equal keys been added into pointer by named "vertex* equal"
-            */
+        handle::vertex* tmp = (*head);
+        if (strcmp((tmp->data)->date, key->date) == 0) {
+            if (tmp->equal == nullptr) {
+                tmp->equal = new handle::vertex;
+                (tmp->equal)->data = key;
+            } else {
+                while (tmp->equal != nullptr) {
+                    tmp = tmp->equal;
+                }
+                tmp->equal = new handle::vertex;
+                (tmp->equal)->data = key;
+            }
         }
     }
 }
@@ -305,8 +313,9 @@ void handle::LeftToRight(vertex* head)
         std::cout << head->data->apartment << " ";
         std::cout.width(22);
         std::cout << head->data->date << std::endl;
-        handle::vertex* p = head->equal;
-        while (p) {
+        handle::vertex* p = head;
+        while (p->equal != nullptr) {
+            p = p->equal;
             std::cout << p->data->fullName << " ";
             std::cout.width(22);
             std::cout << p->data->streetName << " ";
@@ -316,7 +325,6 @@ void handle::LeftToRight(vertex* head)
             std::cout << p->data->apartment << " ";
             std::cout.width(22);
             std::cout << p->data->date << std::endl;
-            p = p->equal;
         }
         LeftToRight(head->right);
     }
@@ -331,4 +339,53 @@ void handle::AddToAVL(inhabitedLocality* key)
 handle::vertex* handle::ReturnVertexRoot()
 {
     return vertexRoot;
+}
+
+int handle::TreeSize(handle::vertex* head)
+{
+    if (head) {
+        return 1 + TreeSize(head->left) + TreeSize(head->right);
+    } else
+        return 0;
+}
+
+void handle::FindKeyTree(char key[])
+{
+    handle::vertex* head = handle::vertexRoot;
+    while (TreeSize(head)) {
+        if (strncmp(head->data->date, key, 8) < 0) {
+            head = head->right;
+        } else if (strncmp(head->data->date, key, 8) > 0) {
+            head = head->left;
+        } else if (strncmp(head->data->date, key, 8) == 0) {
+            break;
+        }
+    }
+    if (head) {
+        std::cout << "Key been found.\n\n";
+        std::cout << head->data->fullName << " ";
+        std::cout.width(22);
+        std::cout << head->data->streetName << " ";
+        std::cout.width(6);
+        std::cout << head->data->house << " ";
+        std::cout.width(10);
+        std::cout << head->data->apartment << " ";
+        std::cout.width(22);
+        std::cout << head->data->date << std::endl;
+        handle::vertex* p = head;
+        while (p->equal != nullptr) {
+            p = p->equal;
+            std::cout << p->data->fullName << " ";
+            std::cout.width(22);
+            std::cout << p->data->streetName << " ";
+            std::cout.width(6);
+            std::cout << p->data->house << " ";
+            std::cout.width(10);
+            std::cout << p->data->apartment << " ";
+            std::cout.width(22);
+            std::cout << p->data->date << std::endl;
+        }
+    } else {
+        std::cout << "Key not found.\n";
+    }
 }

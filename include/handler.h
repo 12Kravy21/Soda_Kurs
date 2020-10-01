@@ -56,4 +56,6 @@ public:
     void LeftToRight(vertex* head);
     void AddToAVL(inhabitedLocality* key);
     vertex* ReturnVertexRoot();
+    int TreeSize(handle::vertex* head);
+    void FindKeyTree(char key[]);
 };

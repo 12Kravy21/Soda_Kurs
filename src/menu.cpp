@@ -30,5 +30,12 @@ void SelectionMenu()
     body.MoveToTree();
     cout << "Tree: \n";
     body.LeftToRight(body.ReturnVertexRoot());
+    cout << "Press any key to continue...\n";
+    getchar();
+    printf(ESC "c");
+    cout << "Write the search key 3 symbols: ";
+    cin >> key;
+    body.FindKeyTree(key);
+    getchar();
     getchar();
 }
