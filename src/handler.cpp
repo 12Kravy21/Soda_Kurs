@@ -20,7 +20,7 @@ void handle::ShowDB()
     int multiplier = 1;
     do {
         printf(ESC "c");
-        cout << "Hello, dear User, enter from 1 to 20 to view pages\n"
+        cout << "Hello, dear User, enter from 1 to 200 to view pages\n"
              << "To exit view write '-1'\n";
         cout << "Number page: ";
         cin >> multiplier;
@@ -31,8 +31,18 @@ void handle::ShowDB()
         if (multiplier == -1) {
             break;
         }
+        cout << "Full Name";
+        std::cout.width(40);
+        cout << "Street";
+        std::cout.width(17);
+        cout << "House";
+        std::cout.width(12);
+        cout << "Apartment";
+        std::cout.width(20);
+        cout << "Date\n";
         for (int i = 20 * (multiplier - 1); i < multiplier * 20; i++) {
-            std::cout << handle::indexRecords[i]->fullName << " ";
+            std::cout << i + 1 << "." << handle::indexRecords[i]->fullName
+                      << " ";
             std::cout.width(22);
             std::cout << handle::indexRecords[i]->streetName << " ";
             std::cout.width(6);
@@ -42,12 +52,31 @@ void handle::ShowDB()
             std::cout.width(22);
             std::cout << handle::indexRecords[i]->date << std::endl;
         }
-        do {
+        cout << "This page is >" << multiplier << "<\n";
+        cout << "Write \"next\" for next page\n";
+        cout << "Write \"prev\" for prev page\n";
+        cout << "Or \"0\" for free choose\n";
+        cout << ">";
+        string chous;
+        cin >> chous;
+        if (chous == "0") {
             cout << "Number page: ";
+            int tmpMlp = multiplier;
             cin >> multiplier;
-        } while (
-                !(((multiplier <= 200) && (multiplier >= 1))
-                  || (multiplier == -1)));
+            if (!(((multiplier <= 200) && (multiplier >= 1))
+                  || (multiplier == -1))) {
+                multiplier = tmpMlp;
+            }
+        }
+        if (chous == "next" && multiplier < 200) {
+            multiplier++;
+        }
+        if (chous == "prev" && multiplier > 1) {
+            multiplier--;
+        }
+        if (chous == "-1") {
+            multiplier = -1;
+        }
     }
 }
 
@@ -169,15 +198,16 @@ void handle::MoveToTree()
     }
 }
 
-// void DeleteList(struct List** head)
-// {
-// struct List* p = *head;
-// while (p != NULL) {
-// *head = p->next;
-// free(p);
-// p = *head;
-// }
-// }
+void handle::DeleteList()
+{
+    list* head = handle::root;
+    list* p = head;
+    while (p != NULL) {
+        head = p->next;
+        delete p;
+        p = head;
+    }
+}
 
 // AVL
 
@@ -388,4 +418,18 @@ void handle::FindKeyTree(char key[])
     } else {
         std::cout << "Key not found.\n";
     }
+}
+
+void handle::DestroyRecursive(vertex*& leaf)
+{
+    if (leaf) {
+        DestroyRecursive(leaf->left);
+        DestroyRecursive(leaf->right);
+        delete *&leaf;
+    }
+}
+
+void handle::DeleteTree()
+{
+    DestroyRecursive(handle::vertexRoot);
 }

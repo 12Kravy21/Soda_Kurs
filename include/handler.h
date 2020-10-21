@@ -45,6 +45,7 @@ public:
     void AddToList(inhabitedLocality* locality);
     void PrintList();
     void MoveToTree();
+    void DeleteList();
 
     // AVL function
 
@@ -58,4 +59,6 @@ public:
     vertex* ReturnVertexRoot();
     int TreeSize(handle::vertex* head);
     void FindKeyTree(char key[]);
+    void DestroyRecursive(vertex*& leaf);
+    void DeleteTree();
 };
