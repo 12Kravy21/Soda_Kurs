@@ -20,6 +20,7 @@ private:
         struct list* next = nullptr;
     };
     list* root = nullptr;
+    int firtsIndex;
 
     // AVL tree
 
@@ -34,6 +35,7 @@ private:
     int increase = true;
 
 public:
+    ~handle();
     handle();
     void ShowDB();
     void heapify(inhabitedLocality** arr, int n, int i);

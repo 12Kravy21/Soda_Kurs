@@ -23,6 +23,9 @@ clean:
 run:
 	cd bin/ && ./kurs
 
+volga:
+	/usr/bin/valgrind --tool=memcheck --xml=yes --xml-file=/tmp/valgrind --gen-suppressions=all --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./bin/kurs
+
 gdb:
 	cd bin/ && gdb debug
 

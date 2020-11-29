@@ -1,0 +1,3 @@
+/home/kravchan/gemez/programming/Sibsutis/saod/saod 3sem/kurs/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kravchan/gemez/programming/Sibsutis/saod/saod 3sem/kurs/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/kravchan/gemez/programming/Sibsutis/saod/saod 3sem/kurs/cmake-build-debug/CMakeFiles/kurs.dir

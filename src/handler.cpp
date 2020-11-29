@@ -1,6 +1,6 @@
 #include "handler.h"
 #include <iostream>
-#include <string.h>
+#include <cstring>
 #define ESC "\033"
 
 handle::handle()
@@ -134,7 +134,7 @@ void handle::HeapSort()
 
 void handle::FindKey(char key[])
 {
-    int L = 0, R = 3999, sero = 0;
+    int L = 0, R = 3999, sero;
     while (L < R) {
         sero = (L + R) / 2;
         if (strncmp(indexRecords[sero]->fullName, key, 3) < 0) {
@@ -144,6 +144,7 @@ void handle::FindKey(char key[])
         }
     }
     if (strncmp(indexRecords[R]->fullName, key, 3) == 0) {
+        firtsIndex = R;
         while (strncmp(indexRecords[R]->fullName, key, 3) == 0 && R < 4000) {
             AddToList(indexRecords[R]);
             R++;
@@ -175,7 +176,10 @@ void handle::PrintList()
 {
     using namespace std;
     handle::list* head = handle::root;
+    int i = 1;
     while (head) {
+        std::cout.width(4);
+        std::cout << firtsIndex + i << " ";
         std::cout << head->data->fullName << " ";
         std::cout.width(22);
         std::cout << head->data->streetName << " ";
@@ -186,6 +190,7 @@ void handle::PrintList()
         std::cout.width(22);
         std::cout << head->data->date << std::endl;
         head = head->next;
+        i++;
     }
 }
 
@@ -202,14 +207,27 @@ void handle::DeleteList()
 {
     list* head = handle::root;
     list* p = head;
-    while (p != NULL) {
+    while (p != nullptr) {
         head = p->next;
         delete p;
         p = head;
     }
+    root = nullptr;
 }
 
 // AVL
+
+char* TrueDate(char date[10])
+{
+    char* dateRev = new char[10];
+    dateRev[0] = date[6];
+    dateRev[1] = date[7];
+    dateRev[2] = date[3];
+    dateRev[3] = date[4];
+    dateRev[4] = date[0];
+    dateRev[5] = date[1];
+    return dateRev;
+}
 
 void handle::LeftLeftRotation(vertex** head)
 {
@@ -279,11 +297,16 @@ void handle::RightLeftRotation(vertex** head)
 
 void handle::AVLTree(vertex** head, inhabitedLocality* key)
 {
+    char* trueDateDB = nullptr;
+    char* trueDateKey = TrueDate(key->date);
+    if (*head != nullptr) {
+        trueDateDB = TrueDate((*head)->data->date);
+    }
     if (*head == nullptr) {
         (*head) = new handle::vertex;
         (*head)->data = key;
         handle::increase = true;
-    } else if (strcmp((*head)->data->date, key->date) > 0) {
+    } else if (strcmp(trueDateDB, trueDateKey) > 0) {
         AVLTree(&((*head)->left), key);
         if (handle::increase == true) {
             if ((*head)->balance > 0) {
@@ -298,7 +321,7 @@ void handle::AVLTree(vertex** head, inhabitedLocality* key)
                 LeftRightRotation(head);
             }
         }
-    } else if (strcmp((*head)->data->date, key->date) < 0) {
+    } else if (strcmp(trueDateDB, trueDateKey) < 0) {
         AVLTree(&((*head)->right), key);
         if (handle::increase == true) {
             if ((*head)->balance < 0) {
@@ -315,7 +338,8 @@ void handle::AVLTree(vertex** head, inhabitedLocality* key)
         }
     } else {
         handle::vertex* tmp = (*head);
-        if (strcmp((tmp->data)->date, key->date) == 0) {
+        char* trueDateTmp = TrueDate((tmp->data)->date);
+        if (strcmp(trueDateTmp, trueDateKey) == 0) {
             if (tmp->equal == nullptr) {
                 tmp->equal = new handle::vertex;
                 (tmp->equal)->data = key;
@@ -327,7 +351,11 @@ void handle::AVLTree(vertex** head, inhabitedLocality* key)
                 (tmp->equal)->data = key;
             }
         }
+        handle::increase = false;
+        delete[] trueDateTmp;
     }
+    delete[] trueDateDB;
+    delete[] trueDateKey;
 }
 
 void handle::LeftToRight(vertex* head)
@@ -382,14 +410,19 @@ int handle::TreeSize(handle::vertex* head)
 void handle::FindKeyTree(char key[])
 {
     handle::vertex* head = handle::vertexRoot;
-    while (TreeSize(head)) {
-        if (strncmp(head->data->date, key, 8) < 0) {
+    char* trueDateDB;
+    char* trueDateKey = TrueDate(key);
+    while (head) {
+        trueDateDB = TrueDate(head->data->date);
+        if (strncmp(trueDateDB, trueDateKey, 8) < 0) {
             head = head->right;
-        } else if (strncmp(head->data->date, key, 8) > 0) {
+        } else if (strncmp(trueDateDB, trueDateKey, 8) > 0) {
             head = head->left;
-        } else if (strncmp(head->data->date, key, 8) == 0) {
+        } else if (strncmp(trueDateDB, trueDateKey, 8) == 0) {
+            delete[] trueDateDB;
             break;
         }
+        delete[] trueDateDB;
     }
     if (head) {
         std::cout << "Key been found.\n\n";
@@ -418,11 +451,13 @@ void handle::FindKeyTree(char key[])
     } else {
         std::cout << "Key not found.\n";
     }
+    delete[] trueDateKey;
 }
 
 void handle::DestroyRecursive(vertex*& leaf)
 {
     if (leaf) {
+        DestroyRecursive(leaf->equal);
         DestroyRecursive(leaf->left);
         DestroyRecursive(leaf->right);
         delete *&leaf;
@@ -432,4 +467,11 @@ void handle::DestroyRecursive(vertex*& leaf)
 void handle::DeleteTree()
 {
     DestroyRecursive(handle::vertexRoot);
+    vertexRoot = nullptr;
+}
+handle::~handle()
+{
+    DeleteList();
+    DeleteTree();
+    delete[] indexRecords;
 }
