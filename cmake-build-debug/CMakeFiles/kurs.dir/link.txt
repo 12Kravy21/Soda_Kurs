@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/kurs.dir/src/handler.cpp.o CMakeFiles/kurs.dir/src/main.cpp.o CMakeFiles/kurs.dir/src/menu.cpp.o  -o kurs 
