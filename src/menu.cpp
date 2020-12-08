@@ -19,6 +19,7 @@ void SelectionMenu()
         cout << "6. Build a search tree by key\n";
         cout << "7. Display the contents of the tree\n";
         cout << "8. Quick search by key in tree\n";
+        cout << "9. Encode by Huffman code\n";
         cout << "For exit write \"-1\"\n";
         cout << "Choose: ";
         cin >> choose;
@@ -75,6 +76,18 @@ void SelectionMenu()
             char key[255];
             cin >> key;
             body.FindKeyTree(key);
+            getchar();
+            break;
+        }
+        case 9: {
+            printf(ESC "c");
+            huffmanCode huffman;
+            string path;
+            cout << "Write the file path\n>";
+            cin >> path;
+            huffman.GetFileByPath(path);
+            huffman.Encode();
+            huffman.ShowTable();
             getchar();
             break;
         }

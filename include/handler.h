@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include "huffmanCode.h"
 
 class handle {
 private:
