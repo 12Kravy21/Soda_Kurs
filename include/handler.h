@@ -1,6 +1,5 @@
 #pragma once
 #include <fstream>
-#include "huffmanCode.h"
 
 class handle {
 private:
@@ -38,6 +37,7 @@ private:
 public:
     ~handle();
     handle();
+    int GetDataBase();
     void ShowDB();
     void heapify(inhabitedLocality** arr, int n, int i);
     void HeapSort();
@@ -47,11 +47,11 @@ public:
 
     void AddToList(inhabitedLocality* locality);
     void PrintList();
-    void MoveToTree();
     void DeleteList();
 
     // AVL function
 
+    void MoveToTree();
     void LeftLeftRotation(vertex** head);
     void LeftRightRotation(vertex** head);
     void RightRightRotation(vertex** head);
@@ -60,7 +60,6 @@ public:
     void LeftToRight(vertex* head);
     void AddToAVL(inhabitedLocality* key);
     vertex* ReturnVertexRoot();
-    int TreeSize(handle::vertex* head);
     void FindKeyTree(char key[]);
     void DestroyRecursive(vertex*& leaf);
     void DeleteTree();

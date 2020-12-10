@@ -1,10 +1,10 @@
 #ifndef ENCODE_H
 #define ENCODE_H
-#include <iostream>
-#include <vector>
+#include <cmath>
 #include <fstream>
 #include <iomanip>
-#include <cmath>
+#include <iostream>
+#include <vector>
 
 class huffmanCode {
 protected:

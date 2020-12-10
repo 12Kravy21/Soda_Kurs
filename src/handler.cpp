@@ -6,11 +6,23 @@
 handle::handle()
 {
     indexRecords = new inhabitedLocality*[4000];
+}
+
+int handle::GetDataBase()
+{
     FILE* file;
     file = fopen("testBase4.dat", "rb");
-    fread((inhabitedLocality*)records, sizeof(inhabitedLocality), 4000, file);
-    for (int i = 0; i < 4000; i++) {
-        indexRecords[i] = &records[i];
+    if (file != nullptr) {
+        fread((inhabitedLocality*)records,
+              sizeof(inhabitedLocality),
+              4000,
+              file);
+        for (int i = 0; i < 4000; i++) {
+            indexRecords[i] = &records[i];
+        }
+        return 1;
+    } else {
+        return 0;
     }
 }
 
@@ -194,15 +206,6 @@ void handle::PrintList()
     }
 }
 
-void handle::MoveToTree()
-{
-    handle::list* head = handle::root;
-    while (head) {
-        AddToAVL(head->data);
-        head = head->next;
-    }
-}
-
 void handle::DeleteList()
 {
     list* head = handle::root;
@@ -216,6 +219,15 @@ void handle::DeleteList()
 }
 
 // AVL
+
+void handle::MoveToTree()
+{
+    handle::list* head = handle::root;
+    while (head) {
+        AddToAVL(head->data);
+        head = head->next;
+    }
+}
 
 char* TrueDate(char date[10])
 {
@@ -397,14 +409,6 @@ void handle::AddToAVL(inhabitedLocality* key)
 handle::vertex* handle::ReturnVertexRoot()
 {
     return vertexRoot;
-}
-
-int handle::TreeSize(handle::vertex* head)
-{
-    if (head) {
-        return 1 + TreeSize(head->left) + TreeSize(head->right);
-    } else
-        return 0;
 }
 
 void handle::FindKeyTree(char key[])

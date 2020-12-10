@@ -11,7 +11,7 @@ int huffmanCode::GetFileByPath(const std::string& path)
             while (file.get(symbol)) {
                 {
                     int flag = 0;
-                    for (int i = 0; i < container.size(); ++i) {
+                    for (unsigned long i = 0; i < container.size(); ++i) {
                         if ((int)(unsigned char)symbol == container[i]) {
                             probabilities[i] += 1;
                             flag = 1;
@@ -61,7 +61,7 @@ void huffmanCode::QuickSort(int L, size_t R)
     if (L < j) {
         QuickSort(L, j);
     }
-    if (i < R) {
+    if (i < (int)R) {
         QuickSort(i, R);
     }
 }
@@ -136,22 +136,22 @@ void huffmanCode::ShowTable()
     if (!probabilities.empty()) {
         int widthProp = 0;
         for (double probability : probabilities) {
-            if (widthProp < to_string(probability).length()) {
+            if (widthProp < (int)to_string(probability).length()) {
                 widthProp = to_string(probability).length();
             }
         }
-        for (int i = 0; i < probabilities.size(); ++i) {
-                cout << setw(3) << container[i] << "|";
+        for (unsigned long i = 0; i < probabilities.size(); ++i) {
+            cout << setw(3) << container[i] << "|";
             cout << setw(widthProp) << to_string(probabilities[i]) + "|";
             cout << setw(3) << to_string(matrixCode[i].size()) << "|";
-            for (int j = 0; j < matrixCode[i].size(); ++j) {
+            for (unsigned long j = 0; j < matrixCode[i].size(); ++j) {
                 cout << matrixCode[i][j];
             }
             cout << "\n";
         }
         double avrLen = 0;
         double entropy = 0;
-        for (int i = 0; i < matrixCode.size(); ++i) {
+        for (unsigned long i = 0; i < matrixCode.size(); ++i) {
             avrLen += matrixCode[i].size() * probabilities[i];
             entropy -= probabilities[i] * log2(probabilities[i]);
         }

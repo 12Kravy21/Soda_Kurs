@@ -1,4 +1,5 @@
 #include "handler.h"
+#include "huffmanCode.h"
 #include <iostream>
 #include <limits>
 #define ESC "\033"
@@ -27,8 +28,11 @@ void SelectionMenu()
         switch (choose) {
         case 1: {
             printf(ESC "c");
-            cout << "The database has been loaded into memory.\n";
-
+            if (body.GetDataBase() == 1) {
+                cout << "The database has been loaded into memory.\n";
+            } else {
+                cout << "Database opening error.\n";
+            }
             break;
         }
         case 2: {
