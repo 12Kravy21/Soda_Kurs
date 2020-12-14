@@ -1,3 +1,4 @@
+#include "menu.h"
 #include "handler.h"
 #include "huffmanCode.h"
 #include <iostream>
@@ -92,6 +93,7 @@ void SelectionMenu()
             huffman.GetFileByPath(path);
             huffman.Encode();
             huffman.ShowTable();
+            huffman.WriteInFile(); //./testBase4.dat
             getchar();
             break;
         }

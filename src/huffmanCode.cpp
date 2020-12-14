@@ -31,6 +31,7 @@ int huffmanCode::GetFileByPath(const std::string& path)
             for (double& probability : probabilities) {
                 probability /= sumOfProbabilities;
             }
+            filePath = path;
             return 1;
         }
     }
@@ -157,5 +158,64 @@ void huffmanCode::ShowTable()
         }
         cout << "Entropy: " << entropy << endl;
         cout << "Average length: " << avrLen << endl;
+    }
+}
+void huffmanCode::WriteInFile()
+{
+    std::ifstream input(filePath, std::ios::in | std::ios::binary);
+    if (input.is_open()) {
+        if (input.good()) {
+            int countBit = 0;
+            int thisByte = 0;
+            char symbol;
+            std::ofstream outputBase(
+                    "./encodedBase.dat", std::ios::out | std::ios::binary);
+            while (input.get(symbol)) {
+                auto bytePos = std::find(
+                        container.begin(),
+                        container.end(),
+                        ((int)(unsigned char)symbol));
+                for (unsigned long j = 0,
+                                   thisElement
+                     = std::distance(container.begin(), bytePos);
+                     j < matrixCode[thisElement].size();
+                     ++j) {
+                    if (countBit == 8) {
+                        int value = 0;
+                        int i = 0;
+                        while (thisByte != 0) {
+                            i++;
+                            value += thisByte % 10 * (int)pow(2, i);
+                            thisByte /= 10;
+                        }
+                        outputBase << (char)value;
+                        countBit = 0;
+                    }
+                    ++countBit;
+                    thisByte *= 10;
+                    thisByte += matrixCode[thisElement][j];
+                }
+            }
+            if (countBit > 0) {
+                int value = 0;
+                int i = 0;
+                while (thisByte != 0) {
+                    i++;
+                    value += thisByte % 10 * (int)pow(2, i);
+                    thisByte /= 10;
+                }
+                outputBase << (char)value;
+                countBit = 0;
+            }
+            outputBase.close();
+            std::ofstream outputTable("./encodeTable.txt", std::ios::out);
+            for (size_t i = 0; i < container.size(); ++i) {
+                outputTable << container[i] << "\t";
+                for (unsigned long j = 0; j < matrixCode[i].size(); ++j) {
+                    outputTable << matrixCode[i][j];
+                }
+                outputTable << "\n";
+            }
+        }
     }
 }

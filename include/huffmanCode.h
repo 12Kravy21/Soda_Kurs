@@ -1,5 +1,6 @@
 #ifndef ENCODE_H
 #define ENCODE_H
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 #include <iomanip>
@@ -12,6 +13,7 @@ protected:
     std::vector<double> probabilities;
     std::vector<double> probabilitiesTmp;
     std::vector<std::vector<int>> matrixCode;
+    std::string filePath;
 
     void QuickSort(int L, size_t R);
     int Up(int n, double q);
@@ -23,6 +25,7 @@ public:
     ~huffmanCode();
     void Encode();
     void ShowTable();
+    void WriteInFile();
 };
 
 #endif
