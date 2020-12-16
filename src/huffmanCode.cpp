@@ -165,12 +165,15 @@ void huffmanCode::WriteInFile()
     std::ifstream input(filePath, std::ios::in | std::ios::binary);
     if (input.is_open()) {
         if (input.good()) {
+            int countByte = 0;
+            int countNewByte = 0;
             int countBit = 0;
             int thisByte = 0;
             char symbol;
             std::ofstream outputBase(
                     "./encodedBase.dat", std::ios::out | std::ios::binary);
             while (input.get(symbol)) {
+                countByte++;
                 auto bytePos = std::find(
                         container.begin(),
                         container.end(),
@@ -181,6 +184,7 @@ void huffmanCode::WriteInFile()
                      j < matrixCode[thisElement].size();
                      ++j) {
                     if (countBit == 8) {
+                        countNewByte++;
                         int value = 0;
                         int i = 0;
                         while (thisByte != 0) {
@@ -197,6 +201,7 @@ void huffmanCode::WriteInFile()
                 }
             }
             if (countBit > 0) {
+                countNewByte++;
                 int value = 0;
                 int i = 0;
                 while (thisByte != 0) {
@@ -216,6 +221,8 @@ void huffmanCode::WriteInFile()
                 }
                 outputTable << "\n";
             }
+            std::cout << "Data compression ratio: "
+                      << (double)(countNewByte) / (countByte)*100 << "%\n";
         }
     }
 }

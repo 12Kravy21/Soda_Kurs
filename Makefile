@@ -8,7 +8,7 @@ bin/kurs: $(OBJECTS)
 			$(CXX) $(COMPILEFLAGS) $^ -o $@ -std=c++11
 
 build/%.o: src/%.cpp
-			$(CXX) $(COMPILEFLAGS) -I include -I src -c $< -o $@
+			$(CXX) $(COMPILEFLAGS) -I include -I src -c $< -o $@ -std=c++11
 
 format:
 			clang-format -i $(FILESCPP) $(wildcard include/*.h)
