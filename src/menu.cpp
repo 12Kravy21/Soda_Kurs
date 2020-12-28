@@ -44,7 +44,8 @@ void SelectionMenu()
         case 3: {
             printf(ESC "c");
             cout << "Now database been sorted.\n";
-            body.HeapSort();
+            //            body.HeapSort();
+            body.DigitalSort();
             break;
         }
         case 4: {

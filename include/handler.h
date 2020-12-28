@@ -13,6 +13,21 @@ private:
     inhabitedLocality records[4000];
     inhabitedLocality** indexRecords;
 
+    // digital sort
+    struct stack {
+        stack* Next = nullptr;
+        union {
+            inhabitedLocality data{};
+            unsigned char Digit[sizeof(inhabitedLocality)];
+        };
+    };
+
+    struct queue {
+        stack* Head = nullptr;
+        stack* Tail = nullptr;
+    };
+    stack* stackRoot = nullptr;
+
     // queue
 
     struct list {
@@ -41,6 +56,7 @@ public:
     void ShowDB();
     void heapify(inhabitedLocality** arr, int n, int i);
     void HeapSort();
+    void DigitalSort();
     void FindKey(char key[]);
 
     // list function

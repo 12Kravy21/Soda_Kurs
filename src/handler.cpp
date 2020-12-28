@@ -13,12 +13,21 @@ int handle::GetDataBase()
     FILE* file;
     file = fopen("testBase4.dat", "rb");
     if (file != nullptr) {
+        // old
         fread((inhabitedLocality*)records,
               sizeof(inhabitedLocality),
               4000,
               file);
         for (int i = 0; i < 4000; i++) {
             indexRecords[i] = &records[i];
+            auto* p = new stack;
+            p->data = records[i];
+            if (stackRoot == nullptr) {
+                stackRoot = p;
+            } else {
+                p->Next = stackRoot;
+                stackRoot = p;
+            }
         }
         return 1;
     } else {
@@ -144,6 +153,45 @@ void handle::HeapSort()
     }
 }
 
+////////////////////////////////////////////////// digital sort
+void handle::DigitalSort()
+{
+    int key[50];
+    stack* p;
+    queue q[256];
+    for (int i = 0; i < 50; ++i) {
+        key[i] = i;
+    }
+    for (int j = 49; j >= 0; j--) {
+        for (auto& i : q) {
+            i.Tail = (stack*)&i.Head;
+        }
+        p = stackRoot;
+        int K = key[j];
+        while (p != nullptr) {
+            int d = p->Digit[K];
+            q[d].Tail->Next = p;
+            q[d].Tail = p;
+            p = p->Next;
+        }
+        p = (stack*)&stackRoot;
+        for (auto& i : q) {
+            if (i.Tail != (stack*)&i.Head) {
+                p->Next = i.Head;
+                p = i.Tail;
+            }
+        }
+        p->Next = nullptr;
+    }
+    stack* head = stackRoot;
+    int i = 0;
+    while (head) {
+        indexRecords[i] = &(head->data);
+        head = head->Next;
+        i++;
+    }
+}
+////////////////////////////////////////////////////////////////
 void handle::FindKey(char key[])
 {
     int L = 0, R = 3999, sero;
